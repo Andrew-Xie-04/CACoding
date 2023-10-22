@@ -80,7 +80,7 @@ public class      SignupView extends JPanel implements ActionListener, PropertyC
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource().equals(clear)){
-                            ...
+                            //clearController.execute
                         }
                     }
                 }

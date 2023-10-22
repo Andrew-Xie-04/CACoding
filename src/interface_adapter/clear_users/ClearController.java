@@ -10,7 +10,7 @@ public class ClearController {
     }
 
 
-    public void execute(String username, String password) {
+    public void execute() {
         ClearUseCaseInteractor.execute();
     }
 }
