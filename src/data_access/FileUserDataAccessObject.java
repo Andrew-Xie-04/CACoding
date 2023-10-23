@@ -2,16 +2,15 @@ package data_access;
 
 import entity.User;
 import entity.UserFactory;
+import use_case.clear_users.ClearUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
-public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface {
+public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface, ClearUserDataAccessInterface {
 
     private final File csvFile;
 
@@ -96,4 +95,33 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         return accounts.containsKey(identifier);
     }
 
+    @Override
+    public void delete() {
+        try {
+            FileWriter fw = new FileWriter(csvFile, false);
+            PrintWriter pw = new PrintWriter(fw, false);
+            pw.flush();
+            pw.close();
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<String> getDeleted() {
+        List<String> users = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] splitted = line.split(",");
+                users.add(splitted[0]);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return users;
+    }
 }
